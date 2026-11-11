@@ -1,0 +1,153 @@
+name: movies
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.1
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  firebase_core: ^5.1.0
+  firebase_auth: ^7.0.1
+  cloud_firestore: ^7.1.0
+  image_picker: ^1.2.4
+  firebase_storage: ^14.0.1
+  firebase_messaging: ^17.0.1
+  flutter_local_notifications: ^22.3.3
+  http: ^1.6.0
+  url_launcher: ^6.3.3
+  video_player: ^2.14.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^6.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/avengers_onboarding.jpg
+    - assets/oppenheimer_onboarding.jpg
+    - assets/movie_collage_onboarding.jpg
+    - assets/bad_boys_watchlist_onboarding.jpg
+    - assets/doctor_strange_reviews_onboarding.jpg
+    - assets/1917_finish_onboarding.jpg
+    - assets/avatars/avatar_sunglasses.jpg
+    - assets/avatars/avatar_hoodie.jpg
+    - assets/avatars/avatar_beard.jpg
+    - assets/avatars/avatar_option_1.jpg
+    - assets/avatars/avatar_option_2.jpg
+    - assets/avatars/avatar_option_3.jpg
+    - assets/avatars/avatar_option_4.jpg
+    - assets/avatars/avatar_option_5.jpg
+    - assets/avatars/avatar_option_6.jpg
+    - assets/avatars/avatar_option_7.jpg
+    - assets/avatars/avatar_option_8.jpg
+    - assets/avatars/avatar_option_9.jpg
+    - assets/auth/forgot_password_illustration.jpg
+    - assets/home/home_background.png
+    - assets/home/available_now.png
+    - assets/home/watch_now.png
+    - assets/home/baby_driver.png
+    - assets/home/captain_america_narrow.png
+    - assets/home/1917_featured.png
+    - assets/home/captain_america.png
+    - assets/home/dark_knight.png
+    - assets/home/black_widow.png
+    - assets/home/action.png
+    - assets/home/see_more.png
+    - assets/home/arrow_right.png
+    - assets/movie_details/screenshot_01.jpg
+    - assets/movie_details/screenshot_02.jpg
+    - assets/movie_details/screenshot_03.jpg
+    - assets/search/empty_search.png
+    - assets/search/black_widow_results.jpg
+    - assets/search/captain_first_avenger_results.jpg
+    - assets/search/iron_man_3_results.jpg
+    - assets/search/civil_war_results.jpg
+    - assets/search/joker_results.jpg
+    - assets/profile/history_01.jpg
+    - assets/profile/history_02.jpg
+    - assets/profile/history_03.jpg
+    - assets/profile/history_04.jpg
+    - assets/profile/history_05.jpg
+    - assets/profile/history_06.jpg
+    - assets/profile/history_07.jpg
+    - assets/profile/history_08.jpg
+    - assets/profile/history_09.jpg
+    - assets/profile/history_10.jpg
+    - assets/profile/history_11.jpg
+    - assets/profile/history_12.jpg
+
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

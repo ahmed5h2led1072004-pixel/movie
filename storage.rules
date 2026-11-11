@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // User profile avatar image path: users/{userId}/profile/avatar.jpg
+    match /users/{userId}/profile/{allPaths=**} {
+      // Allow read so avatar images can be displayed via download URLs or in app
+      allow read: if true;
+
+      // Allow write only by the authenticated owner of the profile
+      allow write: if request.auth != null
+                   && request.auth.uid == userId
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

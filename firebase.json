@@ -1,0 +1,39 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "emulators": {
+    "firestore": {
+      "port": 61588
+    },
+    "ui": {
+      "enabled": false
+    }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "movies-138a9",
+          "appId": "1:214324812785:android:0c1186edd8fab344578250",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "movies-138a9",
+          "configurations": {
+            "android": "1:214324812785:android:0c1186edd8fab344578250",
+            "ios": "1:214324812785:ios:edf5fc784633b259578250",
+            "macos": "1:214324812785:ios:edf5fc784633b259578250",
+            "web": "1:214324812785:web:31961d8602860537578250",
+            "windows": "1:214324812785:web:dc220c4eb8c23225578250"
+          }
+        }
+      }
+    }
+  }
+}

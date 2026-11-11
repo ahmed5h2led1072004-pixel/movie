@@ -1,0 +1,185 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owns(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validProfileFields(data) {
+      return data.name is string
+          && data.name.size() > 0
+          && data.name.size() <= 100
+          && data.phone is string
+          && data.phone.size() <= 32
+          && data.avatar is string
+          && data.avatar.size() > 0
+          && data.avatar.size() <= 1000;
+    }
+
+    function validProfileCreate(uid) {
+      let data = request.resource.data;
+      return data.keys().hasOnly([
+            'uid', 'name', 'email', 'phone', 'avatar', 'createdAt'
+          ])
+          && data.keys().hasAll(['name', 'phone', 'avatar'])
+          && validProfileFields(data)
+          && (!('uid' in data) || data.uid == uid)
+          && (!('email' in data)
+              || (data.email is string && data.email.size() <= 254))
+          && (!('createdAt' in data) || data.createdAt == request.time);
+    }
+
+    function validProfileUpdate(uid) {
+      let data = request.resource.data;
+      return owns(uid)
+          && (!('uid' in resource.data) || resource.data.uid == uid)
+          && (!('uid' in data) || data.uid == uid)
+          && data.diff(resource.data).affectedKeys().hasOnly([
+            'name', 'phone', 'avatar'
+          ])
+          && validProfileFields(data);
+    }
+
+    function validMovieEntry(movieId, data, timestampField) {
+      return data.keys().hasAll([
+            'id', 'title', 'year', 'poster', timestampField
+          ])
+          && data.keys().hasOnly([
+            'id', 'title', 'year', 'poster', timestampField
+          ])
+          && data.id == movieId
+          && data.title is string
+          && data.title.size() > 0
+          && data.title.size() <= 200
+          && data.year is string
+          && data.year.size() > 0
+          && data.year.size() <= 10
+          && data.poster is string
+          && data.poster.size() > 0
+          && data.poster.size() <= 500
+          && data[timestampField] == request.time;
+    }
+
+    function validMovieEntryUpdate(movieId, data, timestampField) {
+      return data.diff(resource.data).affectedKeys().hasOnly([
+            'id', 'title', 'year', 'poster', timestampField
+          ])
+          && data.keys().hasAll([
+            'id', 'title', 'year', 'poster', timestampField
+          ])
+          && data.id == movieId
+          && data.title is string
+          && data.title.size() > 0
+          && data.title.size() <= 200
+          && data.year is string
+          && data.year.size() > 0
+          && data.year.size() <= 10
+          && data.poster is string
+          && data.poster.size() > 0
+          && data.poster.size() <= 500
+          && data[timestampField] == request.time;
+    }
+
+    function validRecentlyWatchedUpdate(movieId) {
+      let data = request.resource.data;
+      return data.diff(resource.data).affectedKeys().hasOnly([
+            'id', 'title', 'year', 'poster', 'watchedAt'
+          ])
+          && data.keys().hasAll([
+            'id', 'title', 'year', 'poster', 'watchedAt'
+          ])
+          && data.id == movieId
+          && data.title is string
+          && data.title.size() > 0
+          && data.title.size() <= 200
+          && data.year is string
+          && data.year.size() > 0
+          && data.year.size() <= 10
+          && data.poster is string
+          && data.poster.size() > 0
+          && data.poster.size() <= 500
+          && data.watchedAt == request.time;
+    }
+
+    function validReview(uid, data) {
+      return data.keys().hasAll([
+            'userId', 'userName', 'rating', 'comment', 'updatedAt'
+          ])
+          && data.keys().hasOnly([
+            'userId', 'userName', 'rating', 'comment', 'updatedAt', 'createdAt'
+          ])
+          && data.userId == uid
+          && data.userName is string
+          && data.userName.size() > 0
+          && data.userName.size() <= 100
+          && data.rating is int
+          && data.rating >= 1
+          && data.rating <= 5
+          && data.comment is string
+          && data.comment.size() > 0
+          && data.comment.size() <= 1000
+          && data.updatedAt == request.time
+          && (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    match /users/{uid} {
+      allow get: if owns(uid);
+      allow list: if false;
+      allow create: if owns(uid) && validProfileCreate(uid);
+      allow update: if validProfileUpdate(uid);
+      allow delete: if false;
+
+      match /watchlist/{movieId} {
+        allow read: if owns(uid);
+        allow create: if owns(uid)
+            && validMovieEntry(movieId, request.resource.data, 'addedAt');
+        allow update: if owns(uid)
+            && validMovieEntryUpdate(movieId, request.resource.data, 'addedAt');
+        allow delete: if owns(uid);
+      }
+
+      match /favorites/{movieId} {
+        allow read: if owns(uid);
+        allow create: if owns(uid)
+            && validMovieEntry(movieId, request.resource.data, 'addedAt');
+        allow update: if owns(uid)
+            && validMovieEntryUpdate(movieId, request.resource.data, 'addedAt');
+        allow delete: if owns(uid);
+      }
+
+      match /recently_watched/{movieId} {
+        allow read: if owns(uid);
+        allow create: if owns(uid)
+            && validMovieEntry(movieId, request.resource.data, 'watchedAt');
+        allow update: if owns(uid) && validRecentlyWatchedUpdate(movieId);
+        allow delete: if owns(uid);
+      }
+    }
+
+    match /movies/{movieId}/reviews/{reviewUid} {
+      // Reviews are shared with authenticated users, but owned by their author.
+      allow read: if signedIn();
+      allow create: if owns(reviewUid)
+          && validReview(reviewUid, request.resource.data)
+          && request.resource.data.keys().hasAll(['createdAt'])
+          && request.resource.data.createdAt == request.time;
+      allow update: if owns(reviewUid)
+          && request.resource.data.userId == reviewUid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'userId', 'userName', 'rating', 'comment', 'updatedAt'
+          ])
+          && validReview(reviewUid, request.resource.data);
+      allow delete: if owns(reviewUid);
+    }
+
+    // No other collection paths are used by the client; deny them by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
